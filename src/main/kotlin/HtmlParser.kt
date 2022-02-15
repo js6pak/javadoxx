@@ -38,7 +38,7 @@ enum class Section {
 fun extractJavadoc(root: Element, variant: Variant): String {
     val accum = StringUtil.borrowBuilder()
 
-    for (paragraph in root.select(if (variant == Variant.GOOGLE) "p, ul" else "div.jd-tagdescr > p").takeWhile { it.childNodeSize() > 0 }) {
+    for (paragraph in root.select(if (variant == Variant.ANDROID) "p, ul" else "div.jd-tagdescr > p").takeWhile { it.childNodeSize() > 0 }) {
         when (paragraph.tagName()) {
             "p" -> {
                 for (node in paragraph.childNodes()) {
@@ -58,6 +58,7 @@ fun extractJavadoc(root: Element, variant: Variant): String {
                                         "{@link ${
                                             URLDecoder.decode(a.attr("href"), Charsets.UTF_8)
                                                 .replace(".html", "")
+                                                .removePrefix("//developer.android.com")
                                                 .removePrefix("/android/reference/")
                                                 .removePrefix("/reference/")
                                                 .replace('/', '.')
