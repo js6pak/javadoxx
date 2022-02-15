@@ -9,8 +9,8 @@ import java.net.URL
 
 fun main(args: Array<String>) {
     // Examples
-    // https://developer.android.com/
-    // https://developers.google.com/android/
+    // https://developer.android.com
+    // https://developers.google.com/android
     // file:///home/js6pak/Downloads/billing-4.0.0-javadoc/
     // file:///home/js6pak/Downloads/play-services-games-22.0.1-javadoc/
     val baseUrl = args[0]
@@ -38,7 +38,7 @@ fun main(args: Array<String>) {
         val url = if (baseUrl.startsWith("file://")) URL(baseUrl + URI(classReference.link).path) else URI(baseUrl).resolve(classReference.link).toURL()
         val builder = parseClass(className, Jsoup.parse(url.readText()), variant)
 
-        println("Found $className")
+        println("Parsed $className")
 
         val enclosingClassName = className.enclosingClassName()
         if (enclosingClassName != null) {

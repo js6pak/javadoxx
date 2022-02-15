@@ -257,6 +257,15 @@ fun parseClass(fullName: ClassName, html: Document, variant: Variant): TypeSpec.
                             continue
 
                         when (state) {
+                            is HtmlState.InterfaceType -> {
+                                if (state.name != null) {
+                                    interfaces.add(state.toTypeName())
+                                    state = HtmlState.InterfaceType()
+                                }
+                            }
+                        }
+
+                        when (state) {
                             is State.Type -> state.name = ClassReference(node).className
                             else -> throw Exception("Bad state")
                         }
@@ -287,8 +296,8 @@ fun parseClass(fullName: ClassName, html: Document, variant: Variant): TypeSpec.
 
         addModifiers(*modifiers.toTypedArray())
 
-        if (superclass != null) superclass(superclass)
-        if (interfaces.isNotEmpty()) addSuperinterfaces(interfaces.distinct())
+        if (superclass != null && superclass.toString() != "java.lang.Object") superclass(superclass)
+        if (interfaces.isNotEmpty()) addSuperinterfaces(interfaces.distinct().filter { it.toString() != "java.lang.annotation.Annotation" })
 
         when (variant) {
             Variant.ANDROID -> {
